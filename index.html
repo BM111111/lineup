@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>无畏契约 · Lineup 战术工坊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0f15;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Inter', 'Roboto', sans-serif;
+            color: #eef4ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0c293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5cd1cb;
+            border-radius: 4px;
+        }
+
+        /* 右上角作者栏（与随机工具一致） */
+        .author-corner {
+            position: fixed;
+            top: 1rem;
+            right: 1.5rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(10, 18, 30, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 0.4rem 1rem 0.4rem 0.6rem;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 215, 150, 0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .author-corner a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ffbc6e;
+        }
+        .author-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #ffdd99;
+            letter-spacing: 0.5px;
+        }
+        .author-name span {
+            transition: color 0.2s ease;
+        }
+        .author-corner a:hover .author-name span {
+            color: rgb(64, 194, 246);
+        }
+
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧窄边栏 */
+        .left-rail {
+            width: 110px;
+            background-color: #0a0f15;
+            border-right: 1px solid #5cd1cb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 0.5rem;
+            gap: 2rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            z-index: 10;
+        }
+        .current-item {
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            border-radius: 1rem;
+            padding: 0.5rem 0;
+        }
+        .current-item:hover {
+            background: #0c293b;
+        }
+        .current-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #5cd1cb;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+        }
+        .current-icon {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            background: transparent;
+            margin: 0 auto 0.3rem;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        }
+        .current-name {
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: #0c293b;
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2rem;
+            margin-top: 0.2rem;
+        }
+        .divider {
+            width: 70%;
+            height: 1px;
+            background: #5cd1cb;
+            opacity: 0.3;
+            margin: 0.2rem 0;
+        }
+
+        /* 右侧主内容 */
+        .right-main {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        .map-card {
+            background: #0c293b;
+            border-radius: 2rem;
+            border: 1px solid #5cd1cb;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+        .map-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #5cd1cb, #9beae7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .map-hint {
+            font-size: 0.7rem;
+            color: #8e9fc3;
+        }
+        .map-image-container {
+            text-align: center;
+            background: #071018;
+            border-radius: 1.2rem;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            min-height: 400px;
+        }
+        .map-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 14px black;
+        }
+        .info-panel {
+            background: #0c293b;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            border-left: 4px solid #5cd1cb;
+            margin-top: 0.5rem;
+        }
+        .info-text {
+            font-size: 0.85rem;
+            color: #cbd5e6;
+        }
+        footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: #5c6f97;
+            border-top: 1px solid #1e2a3e;
+            padding-top: 1rem;
+        }
+
+        /* 模态框（通用） */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: #0a0f15;
+            border: 1px solid #5cd1cb;
+            border-radius: 2rem;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.2rem;
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #5cd1cb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .modal-header h3 {
+            color: #5cd1cb;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: #ffbc6e;
+        }
+
+        /* 地图选择卡片（长方形，文字居中放大） */
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .map-card-item {
+            background: #0c293b;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .map-card-item.active {
+            border-color: #5cd1cb;
+            box-shadow: 0 0 12px rgba(92,209,203,0.5);
+        }
+        .map-name-overlay {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            color: white;
+            text-shadow: 0 0 4px black;
+            text-align: center;
+            width: 90%;
+        }
+
+        /* 英雄选择卡片（方形图片，名字小字） */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 0.8rem;
+        }
+        .hero-card-item {
+            background: #0c293b;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.6rem 0.2rem 0.4rem;
+        }
+        .hero-card-item.active {
+            border-color: #5cd1cb;
+            background: #0d4e54;
+        }
+        .hero-card-item img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            background: transparent;
+            margin-bottom: 4px;
+        }
+        .hero-name-overlay {
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.5);
+            padding: 0.2rem 0.4rem;
+            border-radius: 1rem;
+            width: 90%;
+            white-space: nowrap;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            color: #f0f3fa;
+        }
+
+        @media (max-width: 650px) {
+            .left-rail { width: 80px; }
+            .current-icon { width: 48px; height: 48px; }
+            .hero-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
+            .hero-card-item img { width: 56px; height: 56px; }
+        }
+    </style>
+</head>
+<body>
+<!-- 右上角作者栏 -->
+<div class="author-corner">
+    <a href="https://bm111111.github.io/bmdom/aboutme.html" target="_blank" title="进入关于作者">
+        <img class="author-avatar" src="images/avatar.png" alt="avatar" onerror="this.src='https://s3.bmp.ovh/2026/06/07/uxmqGfg7.png'">
+        <div class="author-name">📌 <span>@BeiMing257</span></div>
+    </a>
+</div>
+
+<div class="app-layout">
+    <!-- 左侧窄边栏 -->
+    <div class="left-rail">
+        <div class="current-item" id="currentMapTrigger">
+            <div class="current-label">🗺️ 地图</div>
+            <img id="currentMapIcon" class="current-icon" src="" alt="地图图标">
+            <div id="currentMapNameText" class="current-name">亚海悬城</div>
+        </div>
+        <div class="divider"></div>
+        <div class="current-item" id="currentHeroTrigger">
+            <div class="current-label">🦸 英雄</div>
+            <img id="currentHeroIcon" class="current-icon" src="" alt="英雄头像">
+            <div id="currentHeroNameText" class="current-name">捷风</div>
+        </div>
+    </div>
+
+    <!-- 右侧主要内容区 -->
+    <div class="right-main">
+        <div class="map-card">
+            <div class="map-header">
+                <div class="map-name" id="mapNameDisplay">亚海悬城</div>
+                <div class="map-hint">⚡ 点击地图待后续编辑点位</div>
+            </div>
+            <div class="map-image-container">
+                <img id="dynamicMapImage" class="map-image" src="" alt="地图预览">
+            </div>
+        </div>
+        <div class="info-panel">
+            <div class="info-text" id="selectionInfoPanel">
+                💡 左侧点击地图/英雄可快速切换
+            </div>
+        </div>
+        <footer>都是凛拓川干的！ ©2025 战术数据逐步丰富中</footer>
+    </div>
+</div>
+
+<!-- 模态框（复用，根据触发者动态填充内容） -->
+<div id="selectionModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalTitle">🗺️ 选择地图</h3>
+            <button class="close-modal" id="closeModalBtn">✖</button>
+        </div>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<script>
+    // ======================= 英雄数据（29位，按定位）========================
+    const heroesByRole = {
+        "决斗者": [
+            { id: "jett", name: "捷风", img: "images/jett.png" },
+            { id: "yoru", name: "夜露", img: "images/yoru.png" },
+            { id: "waylay", name: "幻棱", img: "images/waylay.png" },
+            { id: "neon", name: "霓虹", img: "images/neon.png" },
+            { id: "raze", name: "雷兹", img: "images/raze.png" },
+            { id: "phoenix", name: "不死鸟", img: "images/phoenix.png" },
+            { id: "reyna", name: "芮娜", img: "images/reyna.png" },
+            { id: "iso", name: "壹决", img: "images/iso.png" }
+        ],
+        "控场者": [
+            { id: "clove", name: "暮蝶", img: "images/clove.png" },
+            { id: "viper", name: "蝰蛇", img: "images/viper.png" },
+            { id: "harbor", name: "海神", img: "images/harbor.png" },
+            { id: "miks", name: "迷核", img: "images/miks.png" },
+            { id: "astra", name: "星礈", img: "images/astra.png" },
+            { id: "brimstone", name: "炼狱", img: "images/brimstone.png" },
+            { id: "omen", name: "幽影", img: "images/omen.png" }
+        ],
+        "先锋": [
+            { id: "gekko", name: "盖可", img: "images/gekko.png" },
+            { id: "fade", name: "黑梦", img: "images/fade.png" },
+            { id: "breach", name: "铁臂", img: "images/breach.png" },
+            { id: "kayo", name: "K/O", img: "images/kayo.png" },
+            { id: "skye", name: "斯凯", img: "images/skye.png" },
+            { id: "tejo", name: "钛狐", img: "images/tejo.png" },
+            { id: "sova", name: "猎枭", img: "images/sova.png" }
+        ],
+        "哨位": [
+            { id: "sage", name: "贤者", img: "images/sage.png" },
+            { id: "chamber", name: "尚博勒", img: "images/chamber.png" },
+            { id: "deadlock", name: "钢索", img: "images/deadlock.png" },
+            { id: "killjoy", name: "奇乐", img: "images/killjoy.png" },
+            { id: "veto", name: "禁灭", img: "images/veto.png" },
+            { id: "vyse", name: "维斯", img: "images/vyse.png" },
+            { id: "cypher", name: "零", img: "images/cypher.png" }
+        ]
+    };
+
+    // 地图数据（12张标准地图）—— 已全部改为 .png
+    const mapsList = [
+        { id: "ascent", name: "亚海悬城", img: "images/ascent.png" },
+        { id: "bind", name: "源工重镇", img: "images/bind.png" },
+        { id: "split", name: "霓虹町", img: "images/split.png" },
+        { id: "haven", name: "隐世修所", img: "images/haven.png" },
+        { id: "breeze", name: "微风岛屿", img: "images/breeze.png" },
+        { id: "icebox", name: "森寒冬港", img: "images/icebox.png" },
+        { id: "fracture", name: "裂变峡谷", img: "images/fracture.png" },
+        { id: "lotus", name: "莲华古城", img: "images/lotus.png" },
+        { id: "pearl", name: "深海明珠", img: "images/pearl.png" },
+        { id: "sunset", name: "日落之城", img: "images/sunset.png" },
+        { id: "abyss", name: "幽邃地窟", img: "images/abyss.png" },
+        { id: "corrode", name: "盐海矿镇", img: "images/corrode.png" }
+    ];
+
+    // 当前选中的地图和英雄
+    let currentMap = { id: "ascent", name: "亚海悬城", img: "images/ascent.png" };
+    let currentHero = { id: "jett", name: "捷风", img: "images/jett.png" };
+
+    // DOM 元素
+    const currentMapIcon = document.getElementById('currentMapIcon');
+    const currentMapNameText = document.getElementById('currentMapNameText');
+    const currentHeroIcon = document.getElementById('currentHeroIcon');
+    const currentHeroNameText = document.getElementById('currentHeroNameText');
+    const mapNameDisplay = document.getElementById('mapNameDisplay');
+    const dynamicMapImage = document.getElementById('dynamicMapImage');
+    const selectionInfoPanel = document.getElementById('selectionInfoPanel');
+
+    const modalOverlay = document.getElementById('selectionModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const currentMapTrigger = document.getElementById('currentMapTrigger');
+    const currentHeroTrigger = document.getElementById('currentHeroTrigger');
+
+    // 更新右侧 UI
+    function updateUI() {
+        currentMapIcon.src = currentMap.img;
+        currentMapIcon.alt = currentMap.name;
+        currentMapNameText.innerText = currentMap.name;
+        currentHeroIcon.src = currentHero.img;
+        currentHeroIcon.alt = currentHero.name;
+        currentHeroNameText.innerText = currentHero.name;
+
+        mapNameDisplay.innerText = currentMap.name;
+        dynamicMapImage.src = currentMap.img;
+        dynamicMapImage.alt = currentMap.name;
+        dynamicMapImage.onerror = () => {
+            dynamicMapImage.src = '';
+            dynamicMapImage.alt = `请将图片放入 images/ 文件夹: ${currentMap.img.split('/').pop()}`;
+        };
+        selectionInfoPanel.innerHTML = `🗺️ 当前地图：${currentMap.name} &nbsp;|&nbsp; 🦸 当前英雄：${currentHero.name}<br>✨ 赛前快速切换，后续可添加点位链接`;
+    }
+
+    // ========== 渲染地图选择弹窗（只有地图） ==========
+    function showMapModal() {
+        modalTitle.innerHTML = '🗺️ 选择地图';
+        modalContent.innerHTML = '';
+        const grid = document.createElement('div');
+        grid.className = 'map-grid';
+        mapsList.forEach(map => {
+            const card = document.createElement('div');
+            card.className = 'map-card-item';
+            if (currentMap.id === map.id) card.classList.add('active');
+            card.style.backgroundImage = `url('${map.img}')`;
+            card.style.backgroundSize = 'cover';
+            card.style.backgroundPosition = 'center';
+            card.style.backgroundColor = '#0c293b'; // fallback
+            const nameSpan = document.createElement('div');
+            nameSpan.className = 'map-name-overlay';
+            nameSpan.innerText = map.name;
+            card.appendChild(nameSpan);
+            card.addEventListener('click', () => {
+                currentMap = { ...map };
+                updateUI();
+                // 关闭弹窗
+                modalOverlay.classList.remove('active');
+            });
+            grid.appendChild(card);
+        });
+        modalContent.appendChild(grid);
+        modalOverlay.classList.add('active');
+    }
+
+    // ========== 渲染英雄选择弹窗（只有英雄，分组显示） ==========
+    function showHeroModal() {
+        modalTitle.innerHTML = '🦸 选择英雄';
+        modalContent.innerHTML = '';
+        for (const [roleName, heroes] of Object.entries(heroesByRole)) {
+            const groupDiv = document.createElement('div');
+            groupDiv.style.marginBottom = '1.2rem';
+            const roleIcon = roleName === '决斗者' ? '⚡' : (roleName === '控场者' ? '🌫️' : (roleName === '先锋' ? '🔍' : '🛡️'));
+            const title = document.createElement('div');
+            title.style.fontSize = '0.85rem';
+            title.style.fontWeight = '600';
+            title.style.color = '#5cd1cb';
+            title.style.margin = '0.6rem 0 0.6rem 0';
+            title.style.paddingLeft = '0.2rem';
+            title.innerHTML = `${roleIcon} ${roleName}`;
+            groupDiv.appendChild(title);
+            
+            const grid = document.createElement('div');
+            grid.className = 'hero-grid';
+            heroes.forEach(hero => {
+                const card = document.createElement('div');
+                card.className = 'hero-card-item';
+                if (currentHero.id === hero.id) card.classList.add('active');
+                const img = document.createElement('img');
+                img.src = hero.img;
+                img.alt = hero.name;
+                img.onerror = () => {
+                    img.src = '';
+                    img.style.background = '#0d4e54';
+                    img.style.borderRadius = '50%';
+                };
+                const nameSpan = document.createElement('div');
+                nameSpan.className = 'hero-name-overlay';
+                nameSpan.innerText = hero.name;
+                card.appendChild(img);
+                card.appendChild(nameSpan);
+                card.addEventListener('click', () => {
+                    currentHero = { ...hero };
+                    updateUI();
+                    modalOverlay.classList.remove('active');
+                });
+                grid.appendChild(card);
+            });
+            groupDiv.appendChild(grid);
+            modalContent.appendChild(groupDiv);
+        }
+        modalOverlay.classList.add('active');
+    }
+
+    // 关闭弹窗
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+    }
+
+    // 绑定事件
+    currentMapTrigger.addEventListener('click', showMapModal);
+    currentHeroTrigger.addEventListener('click', showHeroModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
+
+    // 初始化
+    updateUI();
+</script>
+</body>
+</html>
