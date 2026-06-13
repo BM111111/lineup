@@ -148,10 +148,10 @@
         .map-card {
             background: #0c293b;
             border-radius: 2rem;
-            border: 1px solid #5cd1cb;
+            //border: 1px solid #5cd1cb;
             padding: 1rem;
             margin-bottom: 1rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            //box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
         .map-header {
             display: flex;
@@ -188,6 +188,8 @@
             display: block;
             margin: 0 auto;
             box-shadow: 0 4px 14px black;
+            transform-origin: 0 0;
+            transition: transform 0.2s ease;
         }
         .info-panel {
             background: #0c293b;
@@ -381,6 +383,7 @@
             <div class="map-header">
                 <div class="map-name" id="mapNameDisplay">亚海悬城</div>
                 <div class="map-hint">⚡ 点击地图待后续编辑点位</div>
+                <button id="resetZoomBtn" class="map-hint" style="background:#0c293b; border:1px solid #5cd1cb; border-radius:20px; padding:2px 8px; cursor:pointer;">重置缩放</button>
             </div>
             <div class="map-image-container">
                 <img id="dynamicMapImage" class="map-image" src="" alt="地图预览">
@@ -597,6 +600,43 @@
 
     // 初始化
     updateUI();
+    // ========== 地图缩放（滚轮 + 重置） ==========
+let currentScale = 1;
+const scaleStep = 0.05;
+const minScale = 0.5;
+const maxScale = 3;
+
+function applyScale() {
+    dynamicMapImage.style.transform = `scale(${currentScale})`;
+    // 等待浏览器重绘后重新计算图标位置
+    requestAnimationFrame(() => {
+        if (typeof repositionAllIcons === 'function') repositionAllIcons();
+    });
+}
+
+function handleWheel(e) {
+    e.preventDefault();
+    let newScale = currentScale + (e.deltaY > 0 ? -scaleStep : scaleStep);
+    newScale = Math.min(maxScale, Math.max(minScale, newScale));
+    if (newScale === currentScale) return;
+    currentScale = newScale;
+    applyScale();
+}
+
+// 绑定滚轮事件到地图容器
+const mapContainerForZoom = document.getElementById('mapImageContainer');
+if (mapContainerForZoom) {
+    mapContainerForZoom.addEventListener('wheel', handleWheel, { passive: false });
+}
+
+// 可选：添加重置缩放按钮（如果页面上已存在该按钮）
+const resetZoomBtn = document.getElementById('resetZoomBtn');
+if (resetZoomBtn) {
+    resetZoomBtn.addEventListener('click', () => {
+        currentScale = 1;
+        applyScale();
+    });
+}
 </script>
 </body>
 </html>
