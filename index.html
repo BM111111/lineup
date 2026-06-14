@@ -102,6 +102,15 @@
             .skill-btn { width: 40px; height: 40px; }
             .skill-btn img { width: 26px; height: 26px; }
         }
+        #videoModal .modal-container {
+        background: #000;
+        border: none;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        #videoModal .modal-header {
+        background: #000;
+        border-bottom: none;
+    }
     </style>
 </head>
 <body>
@@ -139,7 +148,10 @@
     <div class="right-main">
         <div class="map-card">
             <div class="map-header">
-                <div style="font-size: 1.2rem; font-weight: 700; color: #5cd1cb;">点击技能查看站位 点击英雄头像查看教程</div>
+                <div style="font-size: 1.2rem; font-weight: 700; color: #5cd1cb;">
+                    点击技能查看站位 点击英雄头像查看教程
+                    <span style="font-size: 0.7rem; font-weight: normal; color: #8e9fc3; margin-left: 8px;">（默认静音 点击右边按钮打开音量(大!)）</span>
+                </div>
                 <button id="resetZoomBtn" class="reset-btn">重置缩放</button>
             </div>
             <div class="svg-container" id="svgContainer">
@@ -158,7 +170,18 @@
 <!-- 模态框 -->
 <div id="mapModal" class="modal-overlay"><div class="modal-container"><div class="modal-header"><h3>🗺️ 选择地图</h3><button class="close-modal" id="closeMapModal">✖</button></div><div id="mapModalContent" class="map-grid"></div></div></div>
 <div id="heroModal" class="modal-overlay"><div class="modal-container"><div class="modal-header"><h3>🦸 选择英雄</h3><button class="close-modal" id="closeHeroModal">✖</button></div><div id="heroModalContent" class="hero-grid"></div></div></div>
-
+<!-- 视频播放模态框（新增） -->
+<div id="videoModal" class="modal-overlay" style="z-index: 3000;">
+    <div class="modal-container" style="width: 95vw; height: 90vh; background: #000; padding: 0;">
+        <div class="modal-header" style="border-bottom: none; padding: 8px 12px;">
+            <h3 style="color: #fff;">视频点位</h3>
+            <button class="close-modal" id="closeVideoModal" style="color: #fff;">✖</button>
+        </div>
+        <div style="width: 100%; height: calc(100% - 50px);"> <!-- 减去 header 高度 -->
+            <iframe id="videoIframe" src="" frameborder="0" allowfullscreen style="width: 100%; height: 100%;"></iframe>
+        </div>
+    </div>
+</div>
 <!-- 先加载点位数据（skillsData） -->
 <script src="skills.js"></script>
 
@@ -288,6 +311,50 @@
     heroModal.addEventListener('click', (e) => { if (e.target === heroModal) closeModal(heroModal); });
     document.getElementById('currentMapTrigger').addEventListener('click', openMapModal);
     document.getElementById('currentHeroTrigger').addEventListener('click', openHeroModal);
+    // 视频模态框元素
+    const videoModal = document.getElementById('videoModal');
+    const videoIframe = document.getElementById('videoIframe');
+    const closeVideoModalBtn = document.getElementById('closeVideoModal');
+
+    // 将普通 B 站视频链接转换为嵌入播放器链接
+    function convertToEmbedUrl(url) {
+    // 如果已经是嵌入链接，直接返回
+        if (url.includes('blackboard/html5mobileplayer.html')) return url;
+        
+        // 提取 BV 号
+        const bvMatch = url.match(/BV([a-zA-Z0-9]+)/);
+        if (!bvMatch) return url; // 无法转换，原样返回
+        
+        const bvid = 'BV' + bvMatch[1];
+        // 提取时间戳参数 t=? （可选）
+        const tMatch = url.match(/[?&]t=(\d+)/);
+        const t = tMatch ? `&t=${tMatch[1]}` : '';
+        
+        return `https://www.bilibili.com/blackboard/html5mobileplayer.html?bvid=${bvid}&autoplay=0&danmaku=1${t}&muted=1`;
+    }
+
+    function openVideoModal(videoUrl) {
+        if (!videoUrl) return;
+        const embedUrl = convertToEmbedUrl(videoUrl);
+        videoIframe.src = embedUrl;
+        videoModal.classList.add('active');
+    }
+
+    function closeVideoModal() {
+        videoIframe.src = ''; // 停止播放
+        videoModal.classList.remove('active');
+    }
+
+    // 绑定关闭按钮事件
+    if (closeVideoModalBtn) {
+        closeVideoModalBtn.addEventListener('click', closeVideoModal);
+    }
+    // 点击模态框背景也关闭
+    if (videoModal) {
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) closeVideoModal();
+        });
+    }
 
     // 更新技能图标（左侧筛选按钮）
     function updateSkillIcons() {
@@ -455,9 +522,9 @@
             heroGroup.appendChild(heroCircle);
             heroGroup.appendChild(heroImg);
             heroGroup.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (pos.videoUrl) window.open(pos.videoUrl, '_blank');
-                else selectionInfoPanel.innerHTML = '⛔ 该点位暂无视频链接';
+               e.stopPropagation();
+               if (pos.videoUrl) openVideoModal(pos.videoUrl);
+               else selectionInfoPanel.innerHTML = '⛔ 该点位暂无视频链接';
             });
             svg.appendChild(heroGroup);
             // 连线
