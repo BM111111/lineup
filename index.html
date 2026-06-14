@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>无畏契约 · 全技能点位工坊</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -174,24 +175,25 @@
         { id: "waylay", name: "幻棱", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/waylay.png" },
         { id: "clove", name: "暮蝶", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/clove.png" },
         { id: "viper", name: "蝰蛇", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/viper.png" },
-        { id: "harbor", name: "海神", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/harbor.png" },
-        { id: "miks", name: "迷核", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/miks.png" },
+        { id: "harbor", name: "海神", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/harbor2.png" },
+        { id: "miks", name: "迷核", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/miks2.png" },
         { id: "astra", name: "星礈", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/astra.png" },
         { id: "brimstone", name: "炼狱", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/brimstone.png" },
         { id: "omen", name: "幽影", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/omen.png" },
-        { id: "gekko", name: "盖可", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/gekko.png" },
-        { id: "fade", name: "黑梦", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/fade.png" },
+        { id: "gekko", name: "盖可", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/gekko2.png" },
+        { id: "fade", name: "黑梦", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/fade2.png" },
         { id: "breach", name: "铁臂", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/breach.png" },
         { id: "kayo", name: "K/O", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/kayo.png" },
         { id: "skye", name: "斯凯", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/skye.png" },
         { id: "tejo", name: "钛狐", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/tejo.png" },
         { id: "sova", name: "猎枭", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/sova.png" },
         { id: "sage", name: "贤者", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/sage.png" },
-        { id: "chamber", name: "尚博勒", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/chamber.png" },
-        { id: "deadlock", name: "钢索", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/deadlock.png" },
+        { id: "chamber", name: "尚博勒", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/chamber2.png" },
+        { id: "deadlock", name: "钢索", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/deadlock2.png" },
         { id: "killjoy", name: "奇乐", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/killjoy.png" },
         { id: "vyse", name: "维斯", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/vyse.png" },
-        { id: "cypher", name: "零", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/cypher.png" }
+        { id: "cypher", name: "零", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/cypher.png" },
+        { id: "veto", name: "禁灭", img: "https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/veto.png" }
     ];
 
     const mapsList = [
@@ -349,6 +351,7 @@
         icon.setAttribute('height', '28');
         icon.setAttribute('x', '-14');
         icon.setAttribute('y', '-14');
+        icon.setAttribute('style', 'filter: brightness(0);');
         icon.onerror = () => { icon.setAttribute('href', `images/skills/${skill.heroId}_${skill.skillKey}.png`); };
         
         g.appendChild(circle);
@@ -545,8 +548,8 @@
     }
 
     function updateUI() {
-        currentMapIcon.src = currentMap.img;
-        currentMapIcon.onerror = () => { currentMapIcon.src = `images/${currentMap.img.split('/').pop()}`; };
+        currentMapIcon.src = `https://cdn.jsdelivr.net/gh/bm111111/lineup@main/images/bg_${currentMap.id}.png`;
+currentMapIcon.onerror = () => { currentMapIcon.src = `images/bg_${currentMap.id}.png`; };
         currentMapNameText.innerText = currentMap.name;
         currentHeroIcon.src = currentHero.img;
         currentHeroIcon.onerror = () => { currentHeroIcon.src = `images/${currentHero.img.split('/').pop()}`; };
