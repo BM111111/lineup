@@ -294,10 +294,10 @@ const skillsData = [
         mapId: "pearl",
         heroId: "fade",
         skillKey: "e",
-        skillX: 805,
-        skillY: 753,
+        skillX: 979,
+        skillY: 536,
         positions: [
-            { heroX: 979, heroY: 536, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=586" }
+            { heroX: 805, heroY: 753, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=586" }
         ]
     },
 ];
