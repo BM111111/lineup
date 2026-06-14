@@ -54,7 +54,7 @@
         .skill-btn.active { background: #5BC4B9; border-color: #5BC4B9; }
         .skill-btn.active img { filter: brightness(1) invert(0); }
 
-        .right-main { flex: 1; padding: 1.5rem; overflow: auto; }
+        .right-main { flex: 1; padding: 1.5rem; padding-right: 190px; overflow: auto; }
         .map-card { background: #0c293b; border-radius: 2rem; padding: 1rem; border: none; box-shadow: none; }
         .map-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
         .reset-btn { background: #0c293b; border: 1px solid #5cd1cb; border-radius: 20px; padding: 2px 10px; cursor: pointer; font-size: 0.7rem; color: #eef4ff; }
@@ -153,6 +153,7 @@
                     <span style="font-size: 0.7rem; font-weight: normal; color: #8e9fc3; margin-left: 8px;">（默认静音 点击右边按钮打开音量(大!)）</span>
                 </div>
                 <button id="resetZoomBtn" class="reset-btn">重置缩放</button>
+                <button id="coordPickerBtn" style="background:#0c293b; border:1px solid #5cd1cb; border-radius:20px; padding:2px 10px; cursor:pointer; font-size:0.7rem; color:#eef4ff; margin-right:8px;">📐 拾取坐标</button>
             </div>
             <div class="svg-container" id="svgContainer">
                 <svg id="mapSvg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
@@ -162,6 +163,7 @@
         </div>
         <div class="info-panel">
             <div class="info-text" id="selectionInfoPanel">💡 鼠标悬浮技能图标预览所有站位和连线；点击技能图标锁定站位，点击站位跳转视频</div>
+            <div style="font-size: 0.7rem; color: #8e9fc3; margin-top: 6px;">📱 推荐使用 Chrome 或系统自带浏览器获得最佳视频体验</div>
         </div>
         <footer>都是凛拓川干的！ ©2025 战术数据逐步丰富中</footer>
     </div>
@@ -652,6 +654,42 @@ currentMapIcon.onerror = () => { currentMapIcon.src = `images/bg_${currentMap.id
 
     resetZoomBtn.addEventListener('click', resetZoom);
     bindClearOnBlank();
+    let coordPickerActive = false;
+const coordPickerBtn = document.getElementById('coordPickerBtn');
+if (coordPickerBtn) {
+    coordPickerBtn.addEventListener('click', () => {
+        coordPickerActive = !coordPickerActive;
+        coordPickerBtn.style.background = coordPickerActive ? '#ffbc6e' : '#0c293b';
+        coordPickerBtn.style.color = coordPickerActive ? '#0a1a2a' : '#eef4ff';
+        selectionInfoPanel.innerHTML = coordPickerActive 
+            ? '📌 坐标拾取模式已开启，点击地图任意位置获取坐标'
+            : '💡 鼠标悬浮技能图标预览所有站位和连线；点击技能图标锁定站位，点击站位跳转视频';
+    });
+    
+    // 监听地图点击（兼容触摸屏）
+    svg.addEventListener('click', (e) => {
+        if (!coordPickerActive) return;
+        e.stopPropagation();
+        const rect = svg.getBoundingClientRect();
+        let clientX, clientY;
+        if (e.touches) {
+            // 触摸事件处理（备用）
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        const x = ((clientX - rect.left) / rect.width) * 1920;
+        const y = ((clientY - rect.top) / rect.height) * 1080;
+        alert(`技能/站位坐标:\nX = ${Math.round(x)}\nY = ${Math.round(y)}`);
+        // 自动关闭拾取模式（可选）
+        // coordPickerActive = false;
+        // coordPickerBtn.style.background = '#0c293b';
+        // coordPickerBtn.style.color = '#eef4ff';
+        // selectionInfoPanel.innerHTML = '💡 ...';
+    });
+}
     updateUI();
     initSVGPanZoom();
 </script>
