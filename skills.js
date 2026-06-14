@@ -245,4 +245,60 @@ const skillsData = [
             { heroX: 546, heroY: 608, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=480" }
         ]
     },
+    {
+        id: "pearl_fade_e_attack_8",
+        mapId: "pearl",
+        heroId: "fade",
+        skillKey: "e",
+        skillX: 546,
+        skillY: 502,
+        positions: [
+            { heroX: 546, heroY: 608, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=505" }
+        ]
+    },
+    {
+        id: "pearl_fade_e_attack_9",
+        mapId: "pearl",
+        heroId: "fade",
+        skillKey: "e",
+        skillX: 650,
+        skillY: 432,
+        positions: [
+            { heroX: 509, heroY: 656, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=525" }
+        ]
+    },
+    {
+        id: "pearl_fade_e_attack_10",
+        mapId: "pearl",
+        heroId: "fade",
+        skillKey: "e",
+        skillX: 819,
+        skillY: 567,
+        positions: [
+            { heroX: 859, heroY: 755, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=546" }
+        ]
+    },
+    {
+        id: "pearl_fade_e_attack_11",
+        mapId: "pearl",
+        heroId: "fade",
+        skillKey: "e",
+        skillX: 706,
+        skillY: 572,
+        positions: [
+            { heroX: 859, heroY: 755, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=568" }
+        ]
+    },
+    {
+        id: "pearl_fade_e_attack_12",
+        mapId: "pearl",
+        heroId: "fade",
+        skillKey: "e",
+        skillX: 805,
+        skillY: 753,
+        positions: [
+            { heroX: 979, heroY: 536, type: "attack", videoUrl: "https://www.bilibili.com/video/BV1xNc1ecEMj/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=586" }
+        ]
+    },
 ];
+        
