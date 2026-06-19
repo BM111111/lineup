@@ -423,7 +423,7 @@ const skillsData = [
         {
             "heroX": 478,
             "heroY": 603,
-            "type": "defend",
+            "type": "attack",
             "videoUrl": "https://www.bilibili.com/video/BV1RxFszkEJR/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=21"
         }
     ]
@@ -457,22 +457,6 @@ const skillsData = [
             "heroY": 243,
             "type": "defend",
             "videoUrl": "https://www.bilibili.com/video/BV1RxFszkEJR/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=40"
-        }
-    ]
-    },
-    {
-    "id": "pearl_fade_q_attack_4",
-    "mapId": "pearl",
-    "heroId": "fade",
-    "skillKey": "q",
-    "skillX": 1385,
-    "skillY": 401,
-    "positions": [
-        {
-            "heroX": 1386,
-            "heroY": 573,
-            "type": "defend",
-            "videoUrl": "https://www.bilibili.com/video/BV1qVDkB3EsQ/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=21"
         }
     ]
     },
