@@ -325,8 +325,8 @@ const skillsData = [
     "skillY": 411,
     "positions": [
         {
-            "heroX": 492,
-            "heroY": 463,
+            "heroX": 688,
+            "heroY": 464,
             "type": "defend",
             "videoUrl": "https://www.bilibili.com/video/BV12dXJBcEMD/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=74"
         }
@@ -423,7 +423,7 @@ const skillsData = [
         {
             "heroX": 478,
             "heroY": 603,
-            "type": "attack",
+            "type": "defend",
             "videoUrl": "https://www.bilibili.com/video/BV1RxFszkEJR/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=21"
         }
     ]
