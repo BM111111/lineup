@@ -413,22 +413,6 @@ const skillsData = [
     ]
     },
     {
-    "id": "pearl_fade_q_attack_2",
-    "mapId": "pearl",
-    "heroId": "fade",
-    "skillKey": "q",
-    "skillX": 651,
-    "skillY": 544,
-    "positions": [
-        {
-            "heroX": 478,
-            "heroY": 603,
-            "type": "attack",
-            "videoUrl": "https://www.bilibili.com/video/BV1RxFszkEJR/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=21"
-        }
-    ]
-    },
-    {
     "id": "pearl_fade_q_attack_3",
     "mapId": "pearl",
     "heroId": "fade",
@@ -457,6 +441,22 @@ const skillsData = [
             "heroY": 243,
             "type": "defend",
             "videoUrl": "https://www.bilibili.com/video/BV1RxFszkEJR/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=40"
+        }
+    ]
+    },
+    {
+    "id": "pearl_fade_q_attack_4",
+    "mapId": "pearl",
+    "heroId": "fade",
+    "skillKey": "q",
+    "skillX": 651,
+    "skillY": 544,
+    "positions": [
+        {
+            "heroX": 478,
+            "heroY": 603,
+            "type": "attack",
+            "videoUrl": "https://www.bilibili.com/video/BV1RxFszkEJR/?share_source=copy_web&vd_source=20916290e774355b9b370e0458f617a1&t=21"
         }
     ]
     },
